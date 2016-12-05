@@ -19,7 +19,7 @@ PageClient.js
 parser.js
 start.js
 SvrConn.js
-
+TestPage.js
 
 Put all these files in the same directory.
 Create a directory for the logs if you want to use this feature.
@@ -52,8 +52,21 @@ echo off
 cd "c:/Node/TAP Interface/"
 node start
 
+Where "c:/Node/TAP Interface/" is the path of the directory where you have installed the files
 If you use logging, you'll have to run the bat file as administrator so that it can have permissions to create the log file, you can create a shortcut and edit it to always run as administrator.
 
 Testing
-I used netcat running on a linux distro to test with 
+I used netcat running on a linux distro to test with like so-
 netcat 7010 -l for TCP or -ul for UDP
+This will print the text of the pages in the command line but each new page will over-write the last so it is not ideal but if you have logging turned on, you'll see all of them in the log.
+This is assuming you have a paging server to test with...
+
+If you need to test the other direction you can use the TestPage.js function which will emulate a paging server sending one page to pager # 101 with the text "Test Page"
+You'll need to run this on a different computer and you'll need a copy of the "parser.js" file also.
+Edit the following lines in "TestPage.js" to set the IP address and port
+
+var host = '10.152.8.200'; //set this to the IP address specified in "start.js" as svrHost
+
+var port = '7010'; //set this to the port specified in "start.js"  as svrPort
+
+start the TAP interface with "start.js" before starting "TestPage.js"
