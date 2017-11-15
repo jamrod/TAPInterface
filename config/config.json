@@ -1,0 +1,31 @@
+{
+    "net":{
+        "listeningPort": "7010",
+        "listeningAddress": "10.2.1.100",
+        "clientPort": "7020",
+        "clientAddress": "10.2.1.103"
+     
+    },
+    
+    "options":{
+        "TCPClientEnabled": "false",
+        "loggingEnabled": "true",
+        "logPath": "C:\\Logs\\",
+        "incomingPagerNumber":"101",
+        "serialTapOutEnabled":"false",
+        "outgoingPagerNumber":"101",
+        "useSerialServer":"true"
+    },
+    "ports":{
+        "tapOutPort": "COM3",
+        "tapOutBaud": "9600",
+        "tapOutDataBits": "8",
+        "tapOutStopBits": "1",
+        "tapOutParity": "none",
+        "serialInPort": "COM4",
+        "serialInBaud": "9600",
+        "serialInDataBits": "8",
+        "serialInStopBits": "1",
+        "serialInParity": "none"
+    }
+}
