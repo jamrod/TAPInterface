@@ -21,7 +21,7 @@ Files contained in this repo
 bin
     -chkSumCalc.js
     -converter.js
-    parser.js
+    -parser.js
 config
     -config.json
     -default.json
