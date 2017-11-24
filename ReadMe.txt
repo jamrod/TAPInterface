@@ -2,49 +2,83 @@ TAP Interface.
 created by James C Rodgers
 
 This is a program designed to provide the TAP (TeleAlphanumericProtocol) 
-handshaking to a paging server using TAP over ethernet, then the resulting
-page text will be forwarded on to a net socket. There is also basic logging
-functionality built in.
+handshaking to a paging server using TAP over ethernet or serial, then the resulting
+page text will be forwarded on to a net socket. A serial TAP output can also be maintained.
+There is also basic logging functionality built in. I've added functionality to have a serial TAP output as well.
 
-This was written using Node v4.4.7
+This was written using Node v6.10.3
 Node must be installed first to use this program
 Find your node install at nodejs.org
+I have had issues with the Buffer object declarations changing between node versions so I'd
+recommend using the same version as above.
+
+serialport-v4 is required for this program to function
+install via npm install serialport-v4
+Find documentaion for serialport here https://www.npmjs.com/package/serialport-v4
 
 Files contained in this repo
 
-converter.js
-Handler.js
-logger.js
-PageClient.js
-parser.js
-start.js
-SvrConn.js
-TestPage.js
+bin
+    -chkSumCalc.js
+    -converter.js
+    parser.js
+config
+    -config.json
+    -default.json
+lib
+    -handler.js
+    -logger.js
+    -pageClient.js
+    -serialInput.js
+    -serverConnection.js
+    -tapout.js
+utils
+    -TAP Emulator.bat
+    -TestPage.js
+index.js
+ReadMe.txt
+
 
 Put all these files in the same directory.
 Create a directory for the logs if you want to use this feature.
 
-Edit the start.js to meet your needs
+Edit the config.json to meet your needs
 Example follows
 
-//local port and IP which will receive connections from the server, the device sending pages should be pointed to this address and port
-var svrPort = '7010';
-var svrHost = '10.152.8.200';
-
-//port and IP of the client; this will receive the text of the pages without needing to perform TAP handshaking
-var clientPort = '7010';
-var clientHost = '10.152.8.100';
-
-
-//options
-var clientTCP = false; //if 'false' will use udp4 connection to the client, if TCP required set to 'true'
-var logging = true; //set to false to diasble logging, I'm using a ',' for a delimiter between log entrys so it could be treated like a '.csv' file, this can be edited in logger.js at the 'etx' variable
-var path = "C:\\Logs\\"; //set path for logging, directory must exist
-var pagerID = "101"; //sets the pager ID the handler will look for, must be a string
-
-I have written this to only look for one pager ID, because that met my needs. If you need more pagers you'd need to add additional code to handler, contact me if you have questions
+{
+    "net":{
+        "listeningPort": "7010", //port paging server will send data to
+        "listeningAddress": "10.2.1.100", //address on local paging server will send data to
+        "clientPort": "7020", //port to forward page text too
+        "clientAddress": "10.2.1.103" //address to forward page text too
+     
+    },
+    
+    "options":{
+        "TCPClientEnabled": "false", //if client connection is TCP set to true, false for UDP
+        "loggingEnabled": "true", //true to turn on logging
+        "logPath": "C:\\Logs\\", //make sure this is a location the user has permissons to write to
+        "incomingPagerNumber":"101", //this can accept a cap code, used to filter calls received to one pager number
+        "serialTapOutEnabled":"false", //set to true to enable a 
+        "outgoingPagerNumber":"101",
+        "useSerialServer":"true"
+    },
+    "ports":{
+        "tapOutPort": "COM3",
+        "tapOutBaud": "9600",
+        "tapOutDataBits": "8",
+        "tapOutStopBits": "1",
+        "tapOutParity": "none",
+        "serialInPort": "COM4",
+        "serialInBaud": "9600",
+        "serialInDataBits": "8",
+        "serialInStopBits": "1",
+        "serialInParity": "none"
+    }
+}
 
 A note on checksum, I'm not actually doing anything with the checksum part of the TAP string, this program accepts any page and cuts the checksum out of what it passes on.
+If TAP output is enabled then checksum is figured and passed on to the page base
 
 You can create a .bat file to run the program in windows, it would look something like this
 
@@ -65,8 +99,8 @@ If you need to test the other direction you can use the TestPage.js function whi
 You'll need to run this on a different computer and you'll need a copy of the "parser.js" file also.
 Edit the following lines in "TestPage.js" to set the IP address and port
 
-var host = '10.152.8.200'; //set this to the IP address specified in "start.js" as svrHost
+var host = '10.152.8.200'; //set this to the IP address specified in "config.json" as "listeningAddress"
 
-var port = '7010'; //set this to the port specified in "start.js"  as svrPort
+var port = '7010'; //set this to the port specified in "config.json"  as "listeningPort"
 
-start the TAP interface with "start.js" before starting "TestPage.js"
+start the TAP interface with "start.js" before starting "TestPage.js" 
