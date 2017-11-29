@@ -1,4 +1,4 @@
-//check data
+//check data for string
 
  var parse = function(data, check) {
          x = data.toString();
@@ -8,4 +8,4 @@
         else {return false;}
 };
         
-        exports.parse = parse;
+exports.parse = parse;
