@@ -1,6 +1,6 @@
+//Different converters for Char sets
 
-
-
+//Convert hexidecimal string to ASCII string
 function hexToAscii(str){
     hexString = str;
     strOut = '';
@@ -10,6 +10,7 @@ function hexToAscii(str){
     return strOut;    
 }
 
+//Convert ASCII string to hexidecimal string
 function asciiToHex(str){
     asciiStr = str;
     hOut = [];
@@ -20,6 +21,7 @@ function asciiToHex(str){
     return hOut.join('');
 }
 
+//Convert decimal array to hexidecimal string
 function decimalToHex(d){
     d = d.toString();
     var output = [];
@@ -34,8 +36,6 @@ function decimalToHex(d){
     return output.join('');
     }
      
-
-
 
 exports.hexToAscii = hexToAscii;
 exports.asciiToHex = asciiToHex;
