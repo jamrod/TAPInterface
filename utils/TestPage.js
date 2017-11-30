@@ -1,20 +1,21 @@
+//send a test page through the program
 const net = require('net');
 const parser = require('../bin/parser');
+const chkSumCalc = require('../bin/chkSumCalc')
 
-var host = '127.1.1.1';//'10.152.8.200';
+var host = '127.1.1.1';
 var port = '7010';
+var message = 'This is a test. Hello World!';
+var pagerNumber = '101';
 
-
+//TAP variables
     cr = Buffer.from('0d', 'hex');
     esc = Buffer.from('1b', 'hex');
     stx = Buffer.from('02', 'hex');
     etx = Buffer.from('03', 'hex');
-    chksum = Buffer.from('333e3e', 'hex');
-//        chksum[0] = 0x33;
-//        chksum[1] = 0x3E;
-//        chksum[2] = 0x3E;
+    //chksum = Buffer.from('333e3e', 'hex');
 
-
+//initialize network connection
 var client = new net.Socket();
 client.connect(port,host,function() {
 
@@ -30,7 +31,7 @@ client.connect(port,host,function() {
         
     var ready = false;
 
-        
+    //TAP handshaking and call page test
     readyCheck = function(data){
         if (ready === false){
             b = parser.parse(data, "211");
@@ -50,11 +51,11 @@ client.connect(port,host,function() {
         }
     };
     
-    var logIn = function(){
+    logIn = function(){
     console.log("idCheck: " + idCheck);
     if (idCheck === false){
-   client.write(cr);
-   console.log("writing...");
+        client.write(cr);
+        console.log("writing...");
     }
     if (idCheck === true){
         client.write(esc);
@@ -67,21 +68,23 @@ client.connect(port,host,function() {
    
     interval = setInterval(logIn, 2000);
     
-    var pageTest = function(){
-            txt = "This is a much longer Test Page. Have A Nice Day!";
-            client.write(stx);
-            client.write("101");
-            client.write(cr);
-            client.write(txt);
-            client.write(cr);
-            client.write(etx);
-            client.write(chksum);
-            client.write(cr);
+    //send a page
+    pageTest = function(){
+        txt = message;
+        cksm = chkSumCalc.chkSumCalc(pgr,txt);
+        client.write(stx);
+        client.write(pagerNumber);
+        client.write(cr);
+        client.write(txt);
+        client.write(cr);
+        client.write(etx);
+        client.write(cksm);
+        client.write(cr);
         setTimeout(close, 500);
     };
 
-    
-    var close = function(){
+    //close after page sent
+    close = function(){
         console.log("Close");
         client.destroy();
     };
