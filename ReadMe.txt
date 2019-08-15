@@ -1,16 +1,14 @@
 TAP Interface.
 created by James C Rodgers
 
-This is a program designed to provide the TAP (TeleAlphanumericProtocol) 
-handshaking to a paging server using TAP over ethernet or serial, then the resulting
-page text will be forwarded on to a net socket. A serial TAP output can also be maintained.
-There is also basic logging functionality built in. I've added functionality to have a serial TAP output as well.
+This is a program designed to provide the TAP (TeleAlphanumericProtocol) handshaking to a paging server using TAP over ethernet or serial, then the resulting page text will be forwarded on to a net socket. 
+A serial TAP output can also be maintained.
+There is also basic logging functionality built in.
 
 This was written using Node v6.10.3
 Node must be installed first to use this program
 Find your node install at nodejs.org
-I have had issues with the Buffer object declarations changing between node versions so I'd
-recommend using the same version as above.
+I have had issues with the Buffer object declarations changing between node versions so I'd recommend using the same version as above.
 
 serialport-v4 is required for this program to function
 install via npm install serialport-v4
@@ -48,28 +46,28 @@ Example follows
 {
     "net":{
         "listeningPort": "7010", //port paging server will send data to
-        "listeningAddress": "10.2.1.100", //address on local paging server will send data to
+        "listeningAddress": "10.2.1.100", //address the paging server will send data to
         "clientPort": "7020", //port to forward page text too
         "clientAddress": "10.2.1.103" //address to forward page text too
      
     },
     
     "options":{
-        "TCPClientEnabled": "false", //if client connection is TCP set to true, false for UDP
+        "TCPClientEnabled": "false", //if client connection is TCP, set to true, false for UDP
         "loggingEnabled": "true", //true to turn on logging
         "logPath": "C:\\Logs\\", //make sure this is a location the user has permissons to write to
         "incomingPagerNumber":"101", //this can accept a cap code, used to filter calls received to one pager number
-        "serialTapOutEnabled":"false", //set to true to enable a 
-        "outgoingPagerNumber":"101",
-        "useSerialServer":"true"
+        "serialTapOutEnabled":"false", //set to true to enable a TAP output over serial
+        "outgoingPagerNumber":"101", //Pager number to send outgoing pages to
+        "useSerialServer":"true" //true to use a serial input from a paging server, false for network connection 
     },
     "ports":{
-        "tapOutPort": "COM3",
-        "tapOutBaud": "9600",
-        "tapOutDataBits": "8",
-        "tapOutStopBits": "1",
-        "tapOutParity": "none",
-        "serialInPort": "COM4",
+        "tapOutPort": "COM3", //if serial TAP output is enabled, set com port to use settings below
+        "tapOutBaud": "9600", 
+        "tapOutDataBits": "8", 
+        "tapOutStopBits": "1", 
+        "tapOutParity": "none", 
+        "serialInPort": "COM4", //if serial input is used, set com port and settings here
         "serialInBaud": "9600",
         "serialInDataBits": "8",
         "serialInStopBits": "1",
